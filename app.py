@@ -26,6 +26,12 @@ def logout():
     return Session.logout()
 
 
+@app.route('/session')
+@Session.check_auth
+def session():
+    return Session.get_session_data()
+
+
 if __name__ == '__main__':
     app.secret_key = env('SESSION_SECRET_KEY', cast=str)
     app.run(debug=env('DEBUG', cast=bool))

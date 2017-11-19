@@ -1,6 +1,7 @@
 from flask import request, session
 from passlib.hash import phpass
-from flask_api import status
+from flask_api import status, exceptions
+from functools import wraps
 
 
 class Session:
@@ -18,17 +19,30 @@ class Session:
             session['logged_in'] = True
             session['username'] = username
 
-            return {'msg': 'Logged in successfully'}
+            return {'message': 'Logged in successfully'}
 
         else:
-            return {'msg': 'Login or password are incorrect'}, status.HTTP_400_BAD_REQUEST
+            raise exceptions.ParseError(detail='Login or password are incorrect')
 
     @staticmethod
     def logout():
         session.clear()
 
-        return {'msg': 'Logged out successfully'}
+        return {'message': 'Logged out successfully'}
 
     @staticmethod
-    def check_auth():
-        pass
+    def check_auth(f):
+        @wraps(f)
+        def checker(*args, **kwargs):
+            if 'logged_in' in session:
+                return f(*args, **kwargs)
+
+            else:
+                raise exceptions.PermissionDenied()
+
+        return checker
+
+
+    @staticmethod
+    def get_session_data():
+        return dict(session)
