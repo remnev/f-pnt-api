@@ -1,6 +1,7 @@
 from flask import request, session
 from passlib.hash import phpass
-from flask_api import FlaskAPI, status
+from flask_api import status
+
 
 class Session:
     @staticmethod
@@ -24,7 +25,9 @@ class Session:
 
     @staticmethod
     def logout():
-        pass
+        session.clear()
+
+        return {'msg': 'Logged out successfully'}
 
     @staticmethod
     def check_auth():

@@ -21,6 +21,11 @@ def login():
     return Session.login(mysql=mysql)
 
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    return Session.logout()
+
+
 if __name__ == '__main__':
     app.secret_key = env('SESSION_SECRET_KEY', cast=str)
     app.run(debug=env('DEBUG', cast=bool))
