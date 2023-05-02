@@ -22,7 +22,7 @@ class Session:
             return {'message': 'Logged in successfully'}
 
         else:
-            raise exceptions.ParseError(detail='Login or password are incorrect')
+            raise exceptions.ParseError(detail='Login or password is incorrect')
 
     @staticmethod
     def logout():
